@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h1 class="mb-4">Информация о продукте</h1>
+        <p>Название: {{product.product_name}}</p>
+        <p>Категория: {{product.category}}</p>
+        <p>Цена: {{product.price}}</p>
+        <p>Добавлен:: {{product.created_at}}</p>
+        <p>Обновлен:: {{product.updated_at}}</p>
+        <p>Описание: {{product.description}}</p>
+        <p>Изображение: <img src="{{ product.image.url }}"></p>
+    </div>
+{% endblock %}
