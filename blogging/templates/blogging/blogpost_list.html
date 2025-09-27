@@ -1,0 +1,25 @@
+{% extends 'blogging/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row text-center">
+        {% for blogpost in object_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card mb-4 box-shadow">
+                {% if blogpost.image %}
+                <img src="{{ blogpost.image.url }}" class="card-img-top" alt="{{ blogpost.header }}">
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ blogpost.header }}</h5>
+                    <p class="card-text">{{ blogpost.content|truncatechars:100 }}</p>
+                    <a href="{% url 'blogging:blogpost_detail' blogpost.id %}" class="btn btn-lg btn-block btn-outline-primary">Перейти</a>
+                    <a href="{% url 'blogging:blogpost_update' blogpost.id %}" class="btn btn-lg btn-block btn-outline-primary">Редактировать</a>
+                    <a href="{% url 'blogging:blogpost_delete' blogpost.id %}" class="btn btn-lg btn-block btn-outline-primary">Удалить</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Статей пока нет.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
