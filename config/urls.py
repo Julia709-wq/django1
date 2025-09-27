@@ -1,10 +1,9 @@
 from django.contrib import admin
 from django.urls import path, include
-from catalog import views
-from catalog.views import ProductDetailView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('catalog.urls', namespace='catalog')),
-    path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
+    path('', include(('catalog.urls', 'catalog'), namespace='catalog')),
+    path('blogging/', include(('blogging.urls', 'blogging'), namespace='blogging')),
 ]

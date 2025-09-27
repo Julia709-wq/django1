@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog',
+    'blogging',
 ]
 
 MIDDLEWARE = [
@@ -66,10 +67,6 @@ DATABASES = {
         'PORT': os.getenv('PORT')
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
