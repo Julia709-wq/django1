@@ -20,8 +20,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='photos/', verbose_name='Изображение', )
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name='products')
     price = models.IntegerField()
-    created_at = models.DateField()
-    updated_at = models.DateField()
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.product_name
