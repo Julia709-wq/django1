@@ -1,13 +1,15 @@
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-from django.conf.global_settings import STATICFILES_DIRS, LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, EMAIL_HOST, \
-    EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_USE_TLS, SERVER_EMAIL, DEFAULT_FROM_EMAIL
+from django.conf.global_settings import STATICFILES_DIRS
+
 
 load_dotenv(override=True)
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True if os.getenv('DEBUG') == 'True' else False
@@ -23,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog',
     'blogging',
-    'users',
 ]
 
 MIDDLEWARE = [
@@ -95,19 +96,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_USER_MODEL = 'users.CustomUser'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = 'users:login'
-
-
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
