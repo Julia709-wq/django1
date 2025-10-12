@@ -1,13 +1,18 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
-    <div class="container">
-        <h1 class="mb-4">Информация о продукте</h1>
-        <p>Название: {{object.product_name}}</p>
-        <p>Категория: {{object.category}}</p>
-        <p>Цена: {{object.price}}</p>
-        <p>Добавлен:: {{object.created_at}}</p>
-        <p>Обновлен:: {{object.updated_at}}</p>
-        <p>Описание: {{object.description}}</p>
-        <p>Изображение: <img src="{{ blogpost.image.url }}"></p>
-    </div>
+<h1 class="mb-4">Информация о продукте</h1>
+<p>Название: {{object.product_name}}</p>
+<p>Категория: {{object.category}}</p>
+<p>Цена: {{object.price}}</p>
+<p>Добавлен:: {{object.created_at}}</p>
+<p>Обновлен:: {{object.updated_at}}</p>
+<p>Описание: {{object.description}}</p>
+<p>Изображение: <img src="{{ blogpost.image.url }}"></p>
+
+{% if 'catalog.can_unpublish_product' in perms %}
+    <form action="{% url 'catalog:unpublish_product' product.id  %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Скрыть продукт</button>
+    </form>
+{% endif %}
 {% endblock %}
