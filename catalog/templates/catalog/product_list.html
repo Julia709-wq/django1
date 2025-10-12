@@ -4,6 +4,7 @@
 <div class="row text-center">
     {% for product in object_list %}
     <div class="col-3">
+        {% if product.is_published %}
         <div class="card mb-4 box-shadow">
             <div class="card-header">
                 <h4 class="my-0 font-weight-normal">{{ product.product_name }}</h4>
@@ -17,10 +18,15 @@
                 <h5 class="card-title pricing-card-title">{{ product.price }}</h5>
                     <p class="card-text">{{ product.description|truncatechars:100 }}</p>
                     <a href="{% url 'catalog:product_detail' product.id %}" class="btn btn-lg btn-block btn-outline-primary">Перейти</a>
-                    <a href="{% url 'catalog:product_update' product.id %}" class="btn btn-lg btn-block btn-outline-primary">Редактировать</a>
+                    {% if user == product.owner %}
+                        <a href="{% url 'catalog:product_update' product.id %}" class="btn btn-lg btn-block btn-outline-primary">Редактировать</a>
+                    {% endif %}
+                    {% if user == product.owner or 'catalog.delete_product' in perms %}
                     <a href="{% url 'catalog:product_delete' product.id %}" class="btn btn-lg btn-block btn-outline-primary">Удалить</a>
+                    {% endif %}
             </div>
         </div>
+        {% endif %}
     </div>
     {% endfor %}
 </div>

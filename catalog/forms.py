@@ -64,3 +64,5 @@ class ProductForm(forms.ModelForm):
         if price < 0:
             raise ValidationError('Цена не может быть отрицательной')
         return price
+
+
