@@ -56,6 +56,12 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     success_url = reverse_lazy('catalog:home')
     permission_required = 'catalog.delete_product'
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.owner != self.request.user:
+            raise PermissionDenied('У Вас нет прав для удаления продукта.')
+        return obj
+
 
 class UnpublishProductView(View):
     def post(self, request, pk):
