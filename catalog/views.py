@@ -5,8 +5,13 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseForbidden
 
-from . models import Product
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
+
+from . models import Product, Category
 from .forms import ProductForm
+from .services import ProductService
 
 
 def contacts(request):
@@ -21,6 +26,14 @@ def home(request):
 class ProductsListView(ListView):
     model = Product
 
+    def get_queryset(self):  # низкоуровневое кэширование
+        queryset = cache.get('products_queryset')
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set('products_queryset', queryset, 60 * 15)
+        return queryset
+
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
@@ -56,6 +69,12 @@ class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
     success_url = reverse_lazy('catalog:home')
     permission_required = 'catalog.delete_product'
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.owner != self.request.user:
+            raise PermissionDenied('У Вас нет прав для удаления продукта.')
+        return obj
+
 
 class UnpublishProductView(View):
     def post(self, request, pk):
@@ -67,3 +86,13 @@ class UnpublishProductView(View):
         product.is_published = False
         product.save()
         return redirect('catalog:home')
+
+
+def products_by_category_view(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    products = ProductService.get_by_category(category_id)
+
+    return render(request, 'catalog/category_products.html', {
+        'category': category,
+        'products': products
+    })
