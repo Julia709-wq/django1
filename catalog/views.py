@@ -26,12 +26,12 @@ def home(request):
 class ProductsListView(ListView):
     model = Product
 
-    # def get_queryset(self):  # низкоуровневое кэширование
-    #     queryset = cache.get('products_queryset')
-    #     if not queryset:
-    #         queryset = super().get_queryset()
-    #         cache.set('products_queryset', queryset, 60 * 15)
-    #     return queryset
+    def get_queryset(self):  # низкоуровневое кэширование
+        queryset = cache.get('products_queryset')
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set('products_queryset', queryset, 60 * 15)
+        return queryset
 
 @method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductDetailView(LoginRequiredMixin, DetailView):
