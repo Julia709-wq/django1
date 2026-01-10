@@ -1,4 +1,4 @@
-FROM nginx: latest
+FROM nginx:latest
 
 RUN mkdir -p /app/staticfiles
 
