@@ -1,8 +1,10 @@
 import os
+import sys
+
 from dotenv import load_dotenv
 from pathlib import Path
 from django.conf.global_settings import STATICFILES_DIRS, LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, EMAIL_HOST, \
-    EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_USE_TLS, SERVER_EMAIL, DEFAULT_FROM_EMAIL
+    EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_USE_TLS, SERVER_EMAIL, DEFAULT_FROM_EMAIL, STATIC_ROOT
 
 load_dotenv(override=True)
 
@@ -12,7 +14,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True if os.getenv('DEBUG') == 'True' else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -89,7 +91,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static', ]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -115,6 +118,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://localhost:6379/1',
+        'LOCATION': 'redis://redis:6379/1',
     }
 }
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR/ 'test.db.sqlite3',
+        }
+    }
